@@ -39,6 +39,9 @@ function initialize() {
 		},
 		  mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+		
+		var transitLayer = new google.maps.TransitLayer();	
+		transitLayer.setMap(map);
 	
 	var layer = new google.maps.FusionTablesLayer({
 		query: {
