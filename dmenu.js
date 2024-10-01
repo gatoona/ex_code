@@ -23,6 +23,7 @@
         var firstFocusableElement = modal.find(focusableElements)[0]; // get first element to be focused inside modal
         var focusableContent = modal.find(focusableElements);
         var lastFocusableElement = focusableContent[focusableContent.length - 1]; // get last element to be focused inside modal
+        var dynamicLast = $(lastFocusableElement).closest('li.dropdown').children('a, button')[0];
         
         document.addEventListener('keydown', function(e) {
             let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
@@ -33,32 +34,34 @@
                 }
                 return;
             }
-            if (e.shiftKey) { // if shift key pressed for shift + tab combination
-                if (document.activeElement === firstFocusableElement && isMobile()) {
-                lastFocusableElement.focus(); // add focus for the last focusable element
-                e.preventDefault();
-                }
-            }
-            else { // if tab key is pressed
 
-                // console.log('current', document.activeElement);
-                // console.log('last', lastFocusableElement);
-                // console.log('first', firstFocusableElement);
-                // console.log('dynamiclast',$(lastFocusableElement).closest('li.dropdown').children('a.nav-item'));
-
+            if (isOpened()) {
+                
                 firstFocusableElement = modal.find(focusableElements)[0]; // get first element to be focused inside modal
                 focusableContent = modal.find(focusableElements);
                 lastFocusableElement = focusableContent[focusableContent.length - 1]; // get last element to be focused inside modal
+                dynamicLast = $(lastFocusableElement).closest('li.dropdown').children('a, button')[0];
+
+                console.log('first',firstFocusableElement);
+                console.log('last',lastFocusableElement);
+                console.log('dynamicLast',dynamicLast);
                 
-                if ($(lastFocusableElement).closest('li.dropdown').length > 0 && !$(lastFocusableElement).closest('li.dropdown').children('a.nav-item').hasClass('show')) {
-                    console.log('hidden');
-                    lastFocusableElement = $(lastFocusableElement).closest('li.dropdown').children('a.nav-item')[0];
-                    console.log('last', lastFocusableElement);
+                if (dynamicLast && !$(dynamicLast).hasClass('show')) {
+                    lastFocusableElement = dynamicLast;
                 }
-                
-                if ((document.activeElement === lastFocusableElement) && isMobile()) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
-                firstFocusableElement.focus(); // add focus for the first focusable element
-                e.preventDefault();
+
+                if (e.shiftKey) { // if shift key pressed for shift + tab combination
+                    if (document.activeElement === firstFocusableElement && isMobile()) {
+                    lastFocusableElement.focus(); // add focus for the last focusable element
+                    e.preventDefault();
+                    }
+                }
+                else { // if tab key is pressed
+                    
+                    if ((document.activeElement === lastFocusableElement) && isMobile()) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
+                    firstFocusableElement.focus(); // add focus for the first focusable element
+                    e.preventDefault();
+                    }
                 }
             }
         });
